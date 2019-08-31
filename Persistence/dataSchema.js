@@ -32,47 +32,6 @@ const AssessmentSchema = new Schema(
 
         resourceProfile: [Schema.Types.Mixed],
     
-        //"_comment4": "Estimate",
-        // estimate: [
-        //     {
-        //         granularity: String,
-        //         effort: String,
-        //         cost: Number,
-        //         status: String,
-        //         module: [
-        //             {
-        //                 type: String,
-        //                 name: String,
-        //                 changes: String,
-        //                 effort: String,
-        //                 cost: Number
-        //             }
-        //         ],
-        //         other: [
-        //             {
-        //                 name: String,
-        //                 changes: String,
-        //                 effort: String,
-        //                 cost: String
-        //             }
-        //         ],
-        //         assumptions: String
-        //     }
-        // ],
-        
-        // //"_comment5": "Resource Profile",
-        // resourceProfile: [
-        //     {
-        
-        //         month: Date,
-        //         resource: [
-        //             {
-        //                 role: String,
-        //                 effort: String
-        //             }
-        //         ]
-        //     }
-        // ]
     },
 
     {collection: 'Collection 1'}

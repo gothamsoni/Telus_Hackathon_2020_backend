@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var services = require('../Services/formService')
-var Assessment = require('../Persistence/dataSchema')
+var Module = require('../Persistence/moduleSchema')
 
-router.get('/getForm', function (req, res) {
-  Assessment.find((err, data) => {
+router.get('/getModules', function (req, res) {
+  Module.find((err, data) => {
     if (err) {
       return res.json({ success: false, error: err })
     }
@@ -12,8 +12,8 @@ router.get('/getForm', function (req, res) {
   })
 })
 
-router.post('/putForm', (req, res) => {
-  let newAssessment = new Assessment();
+router.post('/putModule', (req, res) => {
+  let newModule = new Module();
 
   const { form } = req.body;
 
@@ -61,19 +61,12 @@ router.post('/updateForm/:id', (req, res) => {
 router.delete('/deleteForm/:id', (req, res) => {
   const id = req.params.id;
 
-  Tank.deleteOne({ id: id }, function (err) {
+  Assessment.deleteOne({ id: id }, function (err) {
     if (err) return handleError(err);
     // deleted at most one tank document
   });
 
-  // Assessment.findByIdAndUpdate(id, { $set: req.body }, { upsert: true }, function (err, result) {
-  //   if (err) {
-  //     console.log(err);
-  //   }
-  //   console.log("RESULT: " + result);
-  //   res.send('Done')
-  // });
-
+  
 });
 
 
