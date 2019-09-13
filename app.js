@@ -7,6 +7,13 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const dbRoute = require('./Persistence/dbRoute')
 const mongoose = require('mongoose');
+const passport = require("passport");
+
+const format = require('util').format;
+const Multer = require('multer');
+const helmet = require('helmet');
+// const Storage = require('@google-cloud/storage');
+// const storage = Storage();
 
 mongoose.connect(dbRoute, {useNewUrlParser:true});
 
@@ -18,10 +25,12 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// var usersRouter = require('./routes/users');
 var formRouter = require('./controllers/formController')
 var moduleRouter = require('./controllers/moduleController')
+var uploadRouter = require('./controllers/assessmentUploadController')
 var indexRouter2 = require('./controllers/index')
+var userRouter = require("./controllers/userController");
 
 var app = express();
 
@@ -39,11 +48,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Passport middleware
+app.use(passport.initialize());
+// Passport config
+//require("./config/passport")(passport);
+require("./config/passport")(passport);
+// Routes
+app.use("/api/users", userRouter);
+
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//app.use('/users', usersRouter);
+app.use('/uploads', uploadRouter);
 app.use('/forms', formRouter);
 app.use('/modules', moduleRouter)
-app.use('/index', indexRouter2)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

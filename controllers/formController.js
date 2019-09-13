@@ -66,13 +66,7 @@ router.delete('/deleteForm/:id', (req, res) => {
     // deleted at most one tank document
   });
 
-  // Assessment.findByIdAndUpdate(id, { $set: req.body }, { upsert: true }, function (err, result) {
-  //   if (err) {
-  //     console.log(err);
-  //   }
-  //   console.log("RESULT: " + result);
-  //   res.send('Done')
-  // });
+  
 
 });
 

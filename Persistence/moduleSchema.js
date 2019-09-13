@@ -6,9 +6,9 @@ const ModuleSchema = new Schema(
     {
         //"_comment1": "Basic Details",
         name: String,
-        type: Number,
-        services: Number,
-        action: Number,
+        type: String,
+        services: String,
+        action: String,
         version: String,
         description: String,
         system: String,
@@ -19,4 +19,4 @@ const ModuleSchema = new Schema(
     {collection: 'Modules'}
 );
 
-module.exports = mongoose.model("Module", ModuleSchema);
+module.exports = mongoose.model("AssessmentModule", ModuleSchema);
