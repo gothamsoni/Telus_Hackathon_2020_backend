@@ -65,9 +65,6 @@ router.delete('/deleteForm/:id', (req, res) => {
     if (err) return handleError(err);
     // deleted at most one tank document
   });
-
-  
-
 });
 
 

@@ -8,18 +8,10 @@ const gcs = new Storage({
     keyFilename: 'gcp_bucket_creds.json',
 });
 
-//console.log(gcs)
-
-// const storage = require('@google-cloud/storage');
-// const gcs = storage({
-//     projectId: 'assessment-tool',
-// });
-
 const bucketName = 'assessment-bucket'
 const bucket = gcs.bucket(bucketName);
 
 function getPublicUrl(filename) {
-    //return 'https://storage.googleapis.com/' + bucketName + '/' + filename;
     return 'https://console.cloud.google.com/storage/browser/assessment-bucket'+ '/' + filename;
 }
 

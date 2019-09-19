@@ -8,12 +8,10 @@ const bodyParser = require('body-parser');
 const dbRoute = require('./Persistence/dbRoute')
 const mongoose = require('mongoose');
 const passport = require("passport");
-
+var proxy = require('express-http-proxy');
 const format = require('util').format;
-const Multer = require('multer');
+const multer = require('multer');
 const helmet = require('helmet');
-// const Storage = require('@google-cloud/storage');
-// const storage = Storage();
 
 mongoose.connect(dbRoute, {useNewUrlParser:true});
 
@@ -31,6 +29,8 @@ var moduleRouter = require('./controllers/moduleController')
 var uploadRouter = require('./controllers/assessmentUploadController')
 var indexRouter2 = require('./controllers/index')
 var userRouter = require("./controllers/userController");
+var mongoUpload = require("./controllers/upload_to_mongo");
+//var emailRouter = require("./controllers/emailController");
 
 var app = express();
 
@@ -57,11 +57,11 @@ require("./config/passport")(passport);
 app.use("/api/users", userRouter);
 
 app.use('/', indexRouter);
-//app.use('/users', usersRouter);
 app.use('/uploads', uploadRouter);
+//app.use('/uploads', mongoUpload);
 app.use('/forms', formRouter);
 app.use('/modules', moduleRouter)
-
+//app.use('/email', emailRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
