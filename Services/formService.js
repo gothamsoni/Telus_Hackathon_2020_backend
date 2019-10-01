@@ -1,11 +1,6 @@
 const db = require('../Persistence/db');
 const mapper = require('../Mappers/mappers');
 const responses = require('../Models/ServerResponse');
-const mappers = require('../Mappers/mappers.js');
-var diff = require('deep-diff').diff;
-var Assessment = require('../Persistence/dataSchema');
-var _ = require('lodash');
-
 
 function mapForm(assessmentInstance, form) {
 
@@ -59,101 +54,28 @@ function getForms(req, res) {
     })
 }
 
-function getObjectDiff(obj1, obj2) {
-    const diff = Object.keys(obj1).reduce((result, key) => {
-        if (!obj2.hasOwnProperty(key)) {
-            result.push(key);
-        } else if (_.isEqual(obj1[key], obj2[key])) {
-            const resultKeyIndex = result.indexOf(key);
-            result.splice(resultKeyIndex, 1);
-        }
-        return result;
-    }, Object.keys(obj2));
-
-    return diff;
-}
-
-function compare(a, b) {
-
-    var result = {
-        different: [],
-        missing_from_first: [],
-        missing_from_second: []
-    };
-
-    _.reduce(a, function (result, value, key) {
-        if (b.hasOwnProperty(key)) {
-            if (_.isEqual(value, b[key])) {
-                return result;
-            } else {
-                if (typeof (a[key]) != typeof ({}) || typeof (b[key]) != typeof ({})) {
-                    //dead end.
-                    result.different.push(key);
-                    return result;
-                } else {
-                    var deeper = compare(a[key], b[key]);
-                    result.different = result.different.concat(_.map(deeper.different, (sub_path) => {
-                        return key + "." + sub_path;
-                    }));
-
-                    result.missing_from_second = result.missing_from_second.concat(_.map(deeper.missing_from_second, (sub_path) => {
-                        return key + "." + sub_path;
-                    }));
-
-                    result.missing_from_first = result.missing_from_first.concat(_.map(deeper.missing_from_first, (sub_path) => {
-                        return key + "." + sub_path;
-                    }));
-                    return result;
-                }
-            }
-        } else {
-            result.missing_from_second.push(key);
-            return result;
-        }
-    }, result);
-
-    _.reduce(b, function (result, value, key) {
-        if (a.hasOwnProperty(key)) {
-            return result;
-        } else {
-            result.missing_from_first.push(key);
-            return result;
-        }
-    }, result);
-
-    return result;
-}
-
-function difference1(object, base) {
-    function changes(object, base) {
-        return _.transform(object, function (result, value, key) {
-            if (!_.isEqual(value, base[key])) {
-                result[key] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
-            }
-        });
-    }
-    return changes(object, base);
-}
 
 function addHistory(originalForm, newForm) {
 
-    var difference = []
+    var difference = 
+    {
+        old:{},
+        new:{}
+    }
 
     var keys = ['name', 'themeNumber', 'itssNumber', 'rppNumber', 'programName', 'stack', 'customerType', 'status', 'startDate', 'releaseDate', 'summary', 'scope', 'benefits', 'assumptions', 'projectManager', 'e2eSolutionsArchitect', 'e2eSolutionsArchitect', 'estimates', 'resourceProfile']
 
     for (var key of keys) {
         if (originalForm[key] || newForm[key]) {
             if (JSON.stringify(originalForm[key]) !== JSON.stringify(newForm[key])) {
-                difference.push({
-                    old: { [key]: originalForm[key] },
-                    new: { [key]: newForm[key] }
-                })
+                difference.old[key] = originalForm[key];
+                difference.new[key] = newForm[key];
             }
         }
     }
 
     if (!newForm.history) {
-        newForm.history = [{ _date: 0, changes: {}, author: '' }]
+        newForm.history = []
     }
 
     var today = new Date();
@@ -170,8 +92,7 @@ function addHistory(originalForm, newForm) {
     changes_to_add.changes = JSON.stringify(difference)
     changes_to_add.author = newForm.author
     
-
-    var history = originalForm.history
+    var history = originalForm.history ? originalForm.history : []
     history.push(changes_to_add)
     newForm.history = history
     return newForm
