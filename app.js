@@ -13,6 +13,8 @@ const format = require('util').format;
 const multer = require('multer');
 const helmet = require('helmet');
 
+mongoose.set({ useUnifiedTopology: true })
+
 mongoose.connect(dbRoute, {useNewUrlParser:true});
 
 let db = mongoose.connection;

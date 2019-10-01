@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var services = require('../Services/formService')
+var services = require('../Services/moduleService')
 var AssessmentModule = require('../Persistence/moduleSchema')
 
 // Router function to get modules from the database
@@ -18,21 +18,9 @@ router.get('/getModules', function (req, res) {
 // Router function to post a new module
 router.post('/putModule', (req, res) => {
   let nModule = new AssessmentModule();
-
   const { newModule } = req.body;
   //console.log(newModule);
-  
-  nModule.name = newModule.name;
-  nModule.type = newModule.type;
-  nModule.services = newModule.services;
-  nModule.action = newModule.action;
-  nModule.version = newModule.version;
-  nModule.description = newModule.description;
-  nModule.system = newModule.system;
-  nModule.stack = newModule.stack;
-  nModule.entryPoint = newModule.entryPoint;  
-
-  console.log(nModule)
+  services.mapModule(nModule, newModule);
   
   nModule.save().then(form => res.json(form))
 });
@@ -43,7 +31,7 @@ router.post('/putModule', (req, res) => {
 router.post('/updateForm/:id', (req, res) => {
   const id = req.params.id;
 
-  Assessment.findByIdAndUpdate(id, { $set: req.body }, { upsert: true }, function (err, result) {
+  AssessmentModule.findByIdAndUpdate(id, { $set: req.body }, { upsert: true }, function (err, result) {
     if (err) {
       console.log(err);
     }

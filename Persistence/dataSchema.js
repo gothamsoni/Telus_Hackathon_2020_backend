@@ -31,10 +31,14 @@ const AssessmentSchema = new Schema(
         estimates : Schema.Types.Mixed,
 
         resourceProfile: [Schema.Types.Mixed],
+
+        author: String,
+
+        history: Schema.Types.Mixed,
     
     },
 
-    {collection: 'Collection 1'}
+    {collection: 'AForms'}
 );
 
 module.exports = mongoose.model("Assessment", AssessmentSchema);
