@@ -23,7 +23,7 @@ db.once('open', ()=> console.log('Connected to the database'));
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
-
+// CONTROLLER
 var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
 var formRouter = require('./controllers/formController')
@@ -32,6 +32,7 @@ var uploadRouter = require('./controllers/assessmentUploadController')
 var indexRouter2 = require('./controllers/index')
 var userRouter = require("./controllers/userController");
 var mongoUpload = require("./controllers/upload_to_mongo");
+var searchRouter = require("./controllers/searchController")
 //var emailRouter = require("./controllers/emailController");
 
 var app = express();
@@ -57,7 +58,7 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 // Routes
 app.use("/api/users", userRouter);
-
+app.use("/search", searchRouter)
 app.use('/', indexRouter);
 app.use('/uploads', uploadRouter);
 //app.use('/uploads', mongoUpload);

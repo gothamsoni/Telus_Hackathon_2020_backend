@@ -57,10 +57,10 @@ function getForms(req, res) {
 
 function addHistory(originalForm, newForm) {
 
-    var difference = 
+    var difference =
     {
-        old:{},
-        new:{}
+        old: {},
+        new: {}
     }
 
     var keys = ['name', 'themeNumber', 'itssNumber', 'rppNumber', 'programName', 'stack', 'customerType', 'status', 'startDate', 'releaseDate', 'summary', 'scope', 'benefits', 'assumptions', 'projectManager', 'e2eSolutionsArchitect', 'e2eSolutionsArchitect', 'estimates', 'resourceProfile']
@@ -79,22 +79,21 @@ function addHistory(originalForm, newForm) {
     }
 
     var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
-
-    today = mm + '/' + dd + '/' + yyyy;
+    var date = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date + ' ' + time;
 
     //var newVersion = Number([originalForm.history.length - 1]) + 1;
 
     var changes_to_add = {}
-    changes_to_add._date = today;
+    changes_to_add._date = dateTime;
     changes_to_add.changes = JSON.stringify(difference)
     changes_to_add.author = newForm.author
-    
+
     var history = originalForm.history ? originalForm.history : []
     history.push(changes_to_add)
-    newForm.history = history
+    var newHistory = history.reverse()
+    newForm.history = newHistory
     return newForm
 
 }

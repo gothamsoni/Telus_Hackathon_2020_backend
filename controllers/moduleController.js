@@ -28,10 +28,10 @@ router.post('/putModule', (req, res) => {
 
 // Router function to update a module 
 
-router.post('/updateForm/:id', (req, res) => {
+router.post('/updateModule/:id', (req, res) => {
   const id = req.params.id;
-
-  AssessmentModule.findByIdAndUpdate(id, { $set: req.body }, { upsert: true }, function (err, result) {
+  console.log(req.body.module)
+  AssessmentModule.findByIdAndUpdate(id, { $set: req.body.module }, { upsert: true }, function (err, result) {
     if (err) {
       console.log(err);
     }

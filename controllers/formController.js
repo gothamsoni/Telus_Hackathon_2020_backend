@@ -8,16 +8,28 @@ router.get('/getForm', function (req, res) {
     if (err) {
       return res.json({ success: false, error: err })
     }
-    return res.json({ success: true, data: data })
+    var newData = data.reverse();
+    return res.json({ success: true, data: newData })
   })
 })
 
-router.post('/putForm', (req, res) => {
+router.post('/putForm', (req, respose) => {
   let newAssessment = new Assessment();
   const { form } = req.body;
   services.mapForm(newAssessment, form);
 
-  newAssessment.save().then(form => res.json(form))
+  //newAssessment.save().then(form => res.json(form));
+
+  newAssessment.save(function(err){
+    if (err) throw err;
+    /* Document indexation on going */
+    newAssessment.on('es-indexed', function(err, res){
+      if (err) throw err;
+      console.log('model added to es index');
+      respose.send('Done')
+      /* Document is indexed */
+      });
+    });
 });
 
 router.post('/updateForm/:id', (req, res) => {
@@ -30,7 +42,7 @@ router.post('/updateForm/:id', (req, res) => {
 
     const nform = services.addHistory(originalForm, newForm)
 
-    console.log(nform)
+    //console.log(nform)
 
     Assessment.findByIdAndUpdate(id, { $set: nform }, { upsert: true }, function (err, result) {
       if (err) {
