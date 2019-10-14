@@ -21,8 +21,19 @@ router.post('/putModule', (req, res) => {
   const { newModule } = req.body;
   //console.log(newModule);
   services.mapModule(nModule, newModule);
+
+  nModule.save(function(err){
+    if (err) throw err;
+    /* Document indexation on going */
+    nModule.on('es-indexed', function(err, res){
+      if (err) throw err;
+      // console.log('model added to es index');
+      res.send('Done')
+      /* Document is indexed */
+      });
+    });
   
-  nModule.save().then(form => res.json(form))
+  // nModule.save().then(form => res.json(form))
 });
 
 

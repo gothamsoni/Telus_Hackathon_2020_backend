@@ -25,7 +25,7 @@ router.post('/putForm', (req, respose) => {
     /* Document indexation on going */
     newAssessment.on('es-indexed', function(err, res){
       if (err) throw err;
-      console.log('model added to es index');
+      // console.log('model added to es index');
       respose.send('Done')
       /* Document is indexed */
       });

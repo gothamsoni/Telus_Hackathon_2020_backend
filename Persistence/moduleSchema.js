@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosastic = require('mongoosastic');
 const Schema = mongoose.Schema;
 
 
@@ -25,7 +26,38 @@ const ModuleSchema = new Schema(
     {collection: 'Modules'}
 );
 
-module.exports = mongoose.model("AssessmentModule", ModuleSchema);
+ModuleSchema.plugin(mongoosastic, {
+    hosts: [
+        'localhost:9200'
+    ]
+})
+
+var AssessmentModule = mongoose.model("AssessmentModule", ModuleSchema)
+var stream = AssessmentModule.synchronize()
+  , count = 0;
+
+stream.on('data', function(err, doc){
+  count++;
+});
+stream.on('close', function(){
+  console.log('indexed ' + count + ' documents!');
+});
+stream.on('error', function(err){
+  console.log(err);
+});
+
+module.exports = AssessmentModule;
+
+//module.exports = mongoose.model("AssessmentModule", ModuleSchema);
+
+
+
+
+
+
+
+
+
 
 // const ModuleSchema = new Schema(
 
