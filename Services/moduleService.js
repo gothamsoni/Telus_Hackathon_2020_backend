@@ -14,7 +14,7 @@ function mapModule(moduleInstance, newModule) {
     moduleInstance.description = newModule.description;
     moduleInstance.status = newModule.status;
     moduleInstance.type = newModule.type;
-    moduleInstance.subtype = newModule.subtype;
+    moduleInstance.subType = newModule.subType;
     moduleInstance.services = newModule.services;
     moduleInstance.operations = newModule.operations;
     moduleInstance.hardware = newModule.hardware;

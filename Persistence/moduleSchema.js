@@ -11,7 +11,7 @@ const ModuleSchema = new Schema(
         description: String,
         status: String,
         type: String,
-        subtype: String,
+        subType: String,
         services: String,
         operations : String,
         hardware: String,
