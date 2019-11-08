@@ -4,13 +4,11 @@ var services = require('../Services/formService')
 var Assessment = require('../Persistence/dataSchema')
 var AssessmentModule = require('../Persistence/moduleSchema')
 
-router.get("/search_assessment/:query/:sort", function (req, res) {
-    var { query, sort } = req.params
-    console.log(query);
-    console.log(sort.sortBy, sort.order);
+router.get("/search_assessment/:query/:sortBy/:order", function (req, res) {
+    var { query, sortBy, order } = req.params;
     Assessment.search({
         query_string: {
-            query: query //"john"
+            query: query 
         },
     }, function (err, results) {
         if (err) {
@@ -24,12 +22,12 @@ router.get("/search_assessment/:query/:sort", function (req, res) {
                 searchResult.push(obj)
             }
         }
-        if(sort.sortBy){
-            if(order === "asc"){
-                searchResult.sort((a, b) => (a[sort.sortBy] > b[sort.sortBy]) ? 1 : -1);
-            }
+        if(sortBy){
             if(order === "desc"){
-                searchResult.sort((a, b) => (a[sort.sortBy] > b[sort.sortBy]) ? -1 : 1);
+                searchResult.sort((a, b) => (a[sortBy] > b[sortBy]) ? 1 : -1);
+            }
+            if(order === "asc"){
+                searchResult.sort((a, b) => (a[sortBy] > b[sortBy]) ? -1 : 1);
             }
         }
         return res.json({ success: true, data: searchResult }) // results here
