@@ -5,10 +5,19 @@ var AssessmentModule = require('../Persistence/moduleSchema')
 
 // Router function to get modules from the database
 
-router.get('/getModules', function (req, res) {
+router.get('/getModules/:sortBy/:order', function (req, res) {
+  var { sortBy, order } = req.params;
   AssessmentModule.find((err, data) => {
     if (err) {
       return res.json({ success: false, error: err })
+    }
+    if(sortBy){
+      if(order === "desc"){
+          data.sort((a, b) => (a[sortBy] > b[sortBy]) ? 1 : -1);
+      }
+      if(order === "asc"){
+          data.sort((a, b) => (a[sortBy] > b[sortBy]) ? -1 : 1);
+      }
     }
     return res.json({ success: true, data: data })
   })

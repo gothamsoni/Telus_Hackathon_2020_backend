@@ -34,10 +34,9 @@ router.get("/search_assessment/:query/:sortBy/:order", function (req, res) {
     });
 })
 
-router.get("/search_module/:query", function (req, res) {
-    var query = req.params.query
-    console.log(query)
-
+router.get("/search_module/:query/:sortBy/:order", function (req, res) {
+    var { query, sortBy, order } = req.params;
+    
     AssessmentModule.search({
         query_string: {
             query: query //"john"
@@ -52,6 +51,14 @@ router.get("/search_module/:query", function (req, res) {
                 var obj = item._source;
                 obj._id = item._id
                 searchResult.push(obj)
+            }
+        }
+        if(sortBy){
+            if(order === "desc"){
+                searchResult.sort((a, b) => (a[sortBy] > b[sortBy]) ? 1 : -1);
+            }
+            if(order === "asc"){
+                searchResult.sort((a, b) => (a[sortBy] > b[sortBy]) ? -1 : 1);
             }
         }
         return res.json({ success: true, data: searchResult }) // results here
