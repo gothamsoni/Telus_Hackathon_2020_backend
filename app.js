@@ -33,6 +33,7 @@ var indexRouter2 = require('./controllers/index')
 var userRouter = require("./controllers/userController");
 var mongoUpload = require("./controllers/upload_to_mongo");
 var searchRouter = require("./controllers/searchController")
+var proxy = require('express-http-proxy');
 //var emailRouter = require("./controllers/emailController");
 
 var app = express();
@@ -60,11 +61,15 @@ require("./config/passport")(passport);
 app.use("/api/users", userRouter);
 app.use("/search", searchRouter)
 app.use('/', indexRouter);
-app.use('/uploads', uploadRouter);
+//app.use('/uploads', uploadRouter);
 //app.use('/uploads', mongoUpload);
 app.use('/forms', formRouter);
 app.use('/modules', moduleRouter)
 //app.use('/email', emailRouter)
+
+app.use('/uploads', uploadRouter, proxy('http://webproxystatic-bc.tsl.telus.com:8080'));
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

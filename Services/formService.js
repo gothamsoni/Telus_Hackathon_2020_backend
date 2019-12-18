@@ -86,7 +86,7 @@ function addHistory(originalForm, newForm) {
     //var newVersion = Number([originalForm.history.length - 1]) + 1;
 
     var changes_to_add = {}
-    changes_to_add._date = dateTime;
+    changes_to_add._date = String(dateTime);
     changes_to_add.changes = JSON.stringify(difference)
     changes_to_add.author = newForm.author
 

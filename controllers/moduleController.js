@@ -14,9 +14,8 @@ router.get('/getModules', function (req, res) {
   })
 });
 
-
 // Router function to post a new module
-router.post('/putModule', (req, res) => {
+router.post('/putModule', (req, respose) => {
   let nModule = new AssessmentModule();
   const { newModule } = req.body;
   //console.log(newModule);
@@ -28,7 +27,7 @@ router.post('/putModule', (req, res) => {
     nModule.on('es-indexed', function(err, res){
       if (err) throw err;
       // console.log('model added to es index');
-      res.send('Done')
+      respose.send('Done')
       /* Document is indexed */
       });
     });
