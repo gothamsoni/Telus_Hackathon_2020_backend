@@ -3,13 +3,23 @@ var router = express.Router();
 var services = require('../Services/formService')
 var Assessment = require('../Persistence/dataSchema')
 
-router.get('/getForm', function (req, res) {
+router.get('/getForm/:sortBy/:order', function (req, res) {
+  var { sortBy, order } = req.params;
   Assessment.find((err, data) => {
     if (err) {
       return res.json({ success: false, error: err })
     }
-    var newData = data.reverse();
-    return res.json({ success: true, data: newData })
+    if(sortBy){
+      if(order === "desc"){
+          data.sort((a, b) => (a[sortBy] > b[sortBy]) ? 1 : -1);
+      }
+      if(order === "asc"){
+          data.sort((a, b) => (a[sortBy] > b[sortBy]) ? -1 : 1);
+      }
+    } else {
+      data.reverse();
+    }
+    return res.json({ success: true, data: data })
   })
 })
 
